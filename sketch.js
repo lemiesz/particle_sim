@@ -12,6 +12,8 @@
 // http://natureofcode.com/
 // Session 1: Random Walker
 
+const sub = p5.Vector.sub;
+
 let walkers = [];
 let slider;
 let accSliderX;
@@ -43,7 +45,7 @@ function draw() {
 		clear();
 
 		walkers = new Array(slideVal).fill(0).map((item, idx) => {
-			return new Walker(1);
+			return new Walker(25);
 		});
 	}
 	background(51);
@@ -64,7 +66,11 @@ function Walker(size) {
 	this.size = size || 10;
 
 	this.update = function(accVec) {
-		this.acc = createVector(random(-0.1, 0.1), random(-0.1, 0.1));
+		let mouse = createVector(mouseX, mouseY);
+		this.acc = sub(mouse, this.pos);
+		this.acc.normalize();
+		this.acc.mult(0.1);
+		this.acc.add(random(-0.1, 0.1), random(-0.1, 0.1));
 
 		this.vel.add(this.acc);
 		this.pos.add(this.vel);
